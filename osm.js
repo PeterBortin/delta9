@@ -47,17 +47,7 @@
     {type:'aerodrome',name:'Аеропорт «Дніпро»',pos:[35.10,48.36],value:70,radius_m:1200},
     {type:'substation',name:'ПС «Київська» 750кВ',pos:[30.30,50.60],value:80,radius_m:600},
     {type:'substation',name:'ПС «Дніпровська» 750кВ',pos:[35.20,48.40],value:80,radius_m:600},
-    {type:'substation',name:'ПС «Західноукр.» 750кВ',pos:[24.90,49.60],value:75,radius_m:550},
-    {type:'city',name:'Київ',pos:[30.52,50.45],value:130,radius_m:1600},
-    {type:'city',name:'Харків',pos:[36.23,49.99],value:110,radius_m:1400},
-    {type:'city',name:'Одеса',pos:[30.74,46.48],value:105,radius_m:1400},
-    {type:'city',name:'Дніпро',pos:[35.04,48.46],value:105,radius_m:1400},
-    {type:'city',name:'Львів',pos:[24.03,49.84],value:100,radius_m:1300},
-    {type:'city',name:'Запоріжжя',pos:[35.14,47.84],value:95,radius_m:1300},
-    {type:'city',name:'Миколаїв',pos:[31.99,46.97],value:85,radius_m:1100},
-    {type:'city',name:'Кривий Ріг',pos:[33.39,47.91],value:85,radius_m:1100},
-    {type:'city',name:'Вінниця',pos:[28.48,49.23],value:80,radius_m:1000},
-    {type:'city',name:'Полтава',pos:[34.55,49.59],value:80,radius_m:1000}
+    {type:'substation',name:'ПС «Західноукр.» 750кВ',pos:[24.90,49.60],value:75,radius_m:550}
   ];
 
   function fnv(s){ var h=0x811c9dc5; for(var i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,0x01000193); } return 'osm'+((h>>>0).toString(16)); }
@@ -74,7 +64,7 @@
       'way["bridge"="yes"]["highway"]('+b+');',
       'nwr["man_made"~"^(water_works|water_tower|communications_tower)$"]('+b+');',
       'node["place"~"^(city|town)$"]('+b+');',
-      geom ? 'relation["boundary"="administrative"]["admin_level"~"^(7|8)$"]('+b+');' : ''
+      ''
     ].join('');
     return '[out:json][timeout:'+CFG.timeout_s+'];('+sel+');out tags '+(geom?'geom':'center')+';';
   }
@@ -86,8 +76,6 @@
     if(tags.railway==='station') return CFG.classes['railway=station'];
     if(tags.bridge==='yes') return CFG.classes['bridge=yes'];
     if(tags.man_made && CFG.classes['man_made='+tags.man_made]) return CFG.classes['man_made='+tags.man_made];
-    if(tags.place && CFG.classes['place='+tags.place]) return CFG.classes['place='+tags.place];
-    if(tags.boundary==='administrative' && (tags.admin_level==='8'||tags.admin_level==='7')) return CFG.classes['place=city'];
     return null;
   }
   function closeRing(r){ if(r.length<2) return r; var f=r[0],l=r[r.length-1]; if(f[0]!==l[0]||f[1]!==l[1]) r.push([f[0],f[1]]); return r; }
